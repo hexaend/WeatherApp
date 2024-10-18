@@ -7,9 +7,11 @@ import org.example.utils.Utils;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -20,9 +22,10 @@ import java.util.Map;
 public class ApiMain {
     @SuppressWarnings("unchecked")
     public static ArrayList<Double> getLatitudeLongitudeByCity(String city) throws IOException, InterruptedException {
+        String encodedCity = URLEncoder.encode(city, StandardCharsets.UTF_8);
 
         HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(String.format("https://geocoding-api.open-meteo.com/v1/search?name=%s&count=1&language=ru&format=json", city))).build();
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(String.format("https://geocoding-api.open-meteo.com/v1/search?name=%s&count=1&language=ru&format=json", encodedCity))).build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         client.close();
 
